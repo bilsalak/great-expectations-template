@@ -69,12 +69,8 @@ case "$ACTION" in
     edit)
         edit
         ;;
-    be)
-        build $OPTION
-        edit
-        ;;
     *)
-        echo "Usage: notebook [build|edit|be] ~options~"
+        echo "Usage: notebook [build|edit] ~options~"
         exit_status=3
         ;;
 esac

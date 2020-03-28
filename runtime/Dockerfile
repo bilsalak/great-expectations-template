@@ -10,8 +10,6 @@ export DEBIAN_FRONTEND=noninteractive && \
   useradd -G sudo,staff -md /home/developer -s /bin/bash developer && \
   echo "developer:password" | chpasswd && \
 ########## Install great_expectations
-#iptables -t nat -A PREROUTING -p tcp -d 0.0.0.0 --dport 8888 -j DNAT --to-destination 127.0.0.1:8888
-#iptables -t nat -A POSTROUTING -j MASQUERADE
   apt-get install python3 -y && \
   apt-get install python3-pip -y && \
   pip3 install great_expectations && \
@@ -28,7 +26,7 @@ export DEBIAN_FRONTEND=noninteractive && \
 ##########
 ########## Helper commands
 ##########
-COPY helper_commands/notebook /notebook
+COPY helper_commands/notebook /usr/bin/notebook
 
 #Default to developer user
 USER developer

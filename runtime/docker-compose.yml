@@ -3,7 +3,7 @@ services:
 ########## ##########
   dev:
     container_name: ge-dev
-    image: ge-test:latest
+    image: great-expectations-dev:latest
     volumes:
       - ../project:/home/project
       - ../data:/home/data
