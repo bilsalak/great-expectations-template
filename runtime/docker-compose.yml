@@ -2,12 +2,11 @@ version: '3'
 services:
 ########## ##########
   dev:
-    container_name: great_expectations_dev
+    container_name: ge-dev
     image: ge-test:latest
     volumes:
-      - ./project:/home/project
-      - ./data:/home/data
-      - ./developer:/home/developer
+      - ../project:/home/project
+      - ../data:/home/data
     ports:
       - "8888:8888"
     env_file:
