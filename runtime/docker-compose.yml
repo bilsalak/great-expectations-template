@@ -3,7 +3,7 @@ services:
 ########## ##########
   dev:
     container_name: ge-dev
-    image: bilsalak/great-expectations-dev:latest
+    image: bilsalak/great-expectations-dev:v-0.1
     volumes:
       - ../project:/home/project
       - ../data:/home/data
