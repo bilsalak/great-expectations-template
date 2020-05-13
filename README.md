@@ -103,11 +103,15 @@ Great Expectations is now set up.
 
 In the final output of your project initialization some Data Docs were built and placed within the "uncommitted" directory of your project. As the name implies this directory should not be committed to version control and great_expectations has added the requisite .gitignore file to ensure this does not happen. To browse this content you can browse to the location of the index.html file on the filesystem of the host machine and open the index.html file in a browser.
 
+#### TIP
+
+If you're doing a fresh clone of a repo that has already been setup using the first time setup process above, you'll still need to run these steps to recreate the "uncommitted" directory and related files necessary for great_expectations to work properly. Your output won't match what has been described above, but don't worry, this is not a problem.
+
 ### Editing Your Test Suite
 
 The ge-dev container does not come with a graphical user interface or a browser capable of providing a good user experience with Jupyter notebooks. However using a Jupyter notebook as your IDE for test suite development is the recommendation from the team at great_expectations.
 
-Some helper scripts have been added to make it more easily possible to build and run a Jupyter notebook from within the ge-dev container while using your host's web browser to access the notebook.
+Some helper scripts have been added to make it easier to build and run a Jupyter notebook from within the ge-dev container while using your host's web browser to access the notebook.
 
 From inside the container run the command :
 
@@ -157,3 +161,38 @@ developer@ac6c692cac62:/$ notebook edit
 Note that the URLs provided may be incorrect for your host setup. The notebook helper script binds port 8888 to 0.0.0.0 of the docker network. How you have configured your docker runtime will determine which host/IP to use to access this network via the host browser. For example, running docker on Windows via the Docker Quickstart Terminal typically results in the container runtime binding to the host IP 192.168.99.100 so in this case the correct way to access the notebook from the host machine is to point a browser at <http://192.168.99.100:8888/?token=30213d790abc1c8a54bd0aa17200dbe1b45f61acdcb6535d.>
 
 It is also important to note that the token at the end of the URL is produced by Jupyter each time it boots the runtime, and this is used to control access to your notebook. It will change on every notebook runtime boot.
+
+### Next Steps
+
+At this point you have everything you need to begin editing your test suite and to further explore the capabilities of great_expectations but there are a couple of things to note.
+
+#### TIP 1
+
+You're using the great_expectations software and the only thing this codebase has done is to wrap great_expectations into a templated git repo with a bunded runtime to ensure a consistent and reliable developer experience across all projects started from this template.
+
+#### TIP 2
+
+great_expectations has really good documentation and tutorials - <https://docs.greatexpectations.io/> - that will teach you everything you need to know about how use their software. It should be noted that all commands they reference in their documentation can be run exactly as they are shown in their documentation by logging into the container runtime you booted at the beginning of this README
+
+```bash
+# docker exec -it ge-dev bash
+# cd /home/project
+# ~run any great_expectations command~
+```
+
+WITH A VERY IMPORTANT EXCEPTION - If you expect to run the Jupyter notebook inside of the container, but interact with it via a browser running from the host machine, the notebook cannot be booted from within the container as shown in the great_expectations documentation. Use the process described in the "Editing Your Test Suite" section of this README to make that possible or take a look at what the runtime/helper_commands/notebook script of this repo is doing and boot the notebook yourself using a similar approach to bind the notebook to IP 0.0.0.0 and port 8888.
+
+#### TIP 3
+
+Your auto-generated data_docs are an important part of your project and should be kept up to date by auto-generating them before merging to master. The convention expected by this template is to place the most recent and correct data_docs into the data_docs folder at the root of this template when they are ready to be updated in version control.
+
+By default great_expectations generates them into a directory which is not tracked in version control at project/great_expectations/uncommitted/data_docs
+
+You can re-generate your data_docs at any time. More info can be found here - <https://docs.greatexpectations.io/en/latest/command_line.html#great-expectations-docs>
+
+
+### Running In Production
+
+The convention for running this codebase in production is a single entry point in the root of the "project" directory named main.py. From this script you should build your batch_kwargs and call your expectation suites.
+
+This file should be runnable in dev, stage, and production with all differences between those environments abstracted into environment variables. great_expectations support this natively by giving environment variables priority over config file definitions. <https://docs.greatexpectations.io/en/latest/reference/data_context_reference.html#config-variables-file> This template supports this mode through the inclusion of a server.env file which is read at container boot time and used to inject the environment variables defined within into the container runtime.
